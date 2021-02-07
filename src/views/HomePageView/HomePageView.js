@@ -1,34 +1,63 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import fetchMoviesPage from '../../services/fetchMoviesPage.js';
+import FetchMoviesPage from '../../services/fetchMoviesPage.js';
+import MoviesList from '../../components/moviesList';
+import Loader from 'react-loader-spinner';
+
+const Status = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  RESOLVED: 'resolved',
+  REJECTED: 'rejected',
+};
 
 class HomePageView extends Component {
   state = {
     movies: [],
     error: null,
+    status: Status.IDLE,
   };
 
-  async componentDidMount() {
+  async componentDidMount(prevProps, prevState) {
+    this.setState({
+      status: Status.PENDING,
+    });
+
     try {
-      const response = await fetchMoviesPage();
-      this.setState({ movies: response.data.results });
-    } catch {
-      //    this.setState({error})
+      const response = await FetchMoviesPage();
+      this.setState({ movies: response.data.results, status: Status.RESOLVED });
+    } catch (error) {
+      this.setState({ error, status: Status.REJECTED });
     }
   }
 
   render() {
-    const { movies } = this.state;
+    const { movies, status, error } = this.state;
 
-    return (
-      <ul>
-        {movies.map(movie => (
-          <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title || movie.name}</Link>
-          </li>
-        ))}
-      </ul>
-    );
+    if (status === 'idle') {
+      return null;
+    }
+
+    if (status === 'pending') {
+      return (
+        <>
+          <Loader
+            type="Audio"
+            color="#00BFFF"
+            height={80}
+            width={200}
+            timeout={5000}
+          />
+        </>
+      );
+    }
+
+    if (status === 'resolved') {
+      return <MoviesList movies={movies} />;
+    }
+
+    if (status === 'rejected') {
+      return <div>{error}</div>;
+    }
   }
 }
 

@@ -10,7 +10,7 @@ const FetchCast = async id => {
     );
     return response;
   } catch (error) {
-    return error;
+    throw error.message;
   }
 };
 

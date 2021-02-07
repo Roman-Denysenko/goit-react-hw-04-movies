@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(220, 209, 209);
 }
 
 code {
@@ -16,4 +17,14 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  background-color: inherit;
+  border-radius: 5px;
+  cursor: pointer;
 }

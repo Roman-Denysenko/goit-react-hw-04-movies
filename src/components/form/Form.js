@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import s from './Form.module.css';
 
 class Form extends Component {
   static propTypes = {
@@ -28,12 +29,13 @@ class Form extends Component {
     const { search } = this.state;
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
+        <form className={s.form} onSubmit={this.handleSubmit}>
           <input
             type="text"
             value={search}
             onChange={this.handleChangeForm}
           ></input>
+
           <button type="submit">Search</button>
         </form>
       </>

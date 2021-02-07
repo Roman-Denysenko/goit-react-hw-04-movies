@@ -9,7 +9,7 @@ const FetchMoviesPage = async () => {
     );
     return response;
   } catch (error) {
-    return error;
+    throw error.message;
   }
 };
 

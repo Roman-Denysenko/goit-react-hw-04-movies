@@ -1,22 +1,46 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import HomePage from './views/HomePageView';
-import MoviesPage from './views/MoviesPageView';
-import MovieDetailsPage from './views/MovieDetailsPageView';
-
+import routes from './routes';
 import Header from './components/header';
-
+import Loader from 'react-loader-spinner';
 import './App.css';
+
+const HomePage = lazy(() =>
+  import('./views/HomePageView' /* webpackChunkName: "home-view" */),
+);
+
+const MoviesPage = lazy(() =>
+  import('./views/MoviesPageView' /* webpackChunkName: "movie-view" */),
+);
+
+const MovieDetailsPage = lazy(() =>
+  import(
+    './views/MovieDetailsPageView' /* webpackChunkName: "moviesDetails-view" */
+  ),
+);
 
 function App() {
   return (
     <>
       <Header />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/movies" component={MoviesPage} />
-        <Route path="/movies/:movieId" component={MovieDetailsPage} />
-      </Switch>
+
+      <Suspense
+        fallback={
+          <Loader
+            type="Audio"
+            color="#00BFFF"
+            height={80}
+            width={200}
+            timeout={5000}
+          />
+        }
+      >
+        <Switch>
+          <Route exact path={routes.home} component={HomePage} />
+          <Route exact path={routes.movies} component={MoviesPage} />
+          <Route path={routes.movieDetails} component={MovieDetailsPage} />
+        </Switch>
+      </Suspense>
     </>
   );
 }
